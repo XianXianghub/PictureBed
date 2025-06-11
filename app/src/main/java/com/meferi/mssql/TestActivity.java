@@ -16,10 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
 import com.meferi.sdk.ParameterID;
 import com.meferi.sdk.ScanManager;
-import com.squareup.picasso.Picasso;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -44,6 +45,7 @@ public class TestActivity extends AppCompatActivity {
     private String table;
     private String port;
     private Product mProduct;
+    private boolean isExistData = false;
 
 
     private ImageView itemImage;
@@ -56,8 +58,6 @@ public class TestActivity extends AppCompatActivity {
     // Action and extra keys for the broadcast
     private String ACTION_SEND_RESULT = "android.intent.action.MEF_ACTION";
     private String EXTRA_SCAN_BARCODE = "android.intent.action.MEF_DATA1";
-    private String EXTRAL_DECODE_TIME = "time";
-    private String EXTRA_BARCODE_TYPE = "type";
 
     // BroadcastReceiver to handle scan results
     private BroadcastReceiver mResultReceiver = new BroadcastReceiver() {
@@ -68,7 +68,6 @@ public class TestActivity extends AppCompatActivity {
             if (ACTION_SEND_RESULT.equals(action)) {
                 // Get the scanned barcode from the intent
                 String val = intent.getStringExtra(EXTRA_SCAN_BARCODE);
-                String type = intent.getStringExtra(EXTRA_BARCODE_TYPE);
 
                 Bundle bundle = intent.getExtras();
                 for (String key: bundle.keySet())
@@ -108,7 +107,8 @@ public class TestActivity extends AppCompatActivity {
 
         editor.apply();
 
-
+        itemImage.setImageDrawable(null);
+        itemImage.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_background));
 
     }
 
@@ -158,8 +158,7 @@ public class TestActivity extends AppCompatActivity {
             // Get the action and data parameters for the broadcast from the scanner manager
             ACTION_SEND_RESULT = mScannerManager.getParameterString(ParameterID.BROADCAST_ACTION);
             EXTRA_SCAN_BARCODE = mScannerManager.getParameterString(ParameterID.BROADCAST_DATA);
-            EXTRAL_DECODE_TIME = mScannerManager.getParameterString(ParameterID.BROADCAST_DECODE_TIME);
-            EXTRA_BARCODE_TYPE = mScannerManager.getParameterString(ParameterID.BROADCAST_TYPE);
+
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         }
@@ -185,14 +184,10 @@ public class TestActivity extends AppCompatActivity {
         }
 
 
-        Picasso.get().cancelRequest(itemImage);
-
-        // 2. 清空 ImageView（不要回收 Bitmap！）
         itemImage.setImageDrawable(null);
+        itemImage.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_background));
 
-        // 3. 可选：设置透明背景
-        itemImage.setBackgroundColor(Color.TRANSPARENT);
-
+        isExistData = false;
 
         new Thread(() -> {
             try {
@@ -224,9 +219,9 @@ public class TestActivity extends AppCompatActivity {
                     Log.d(TAG, "ProductImage=" + ProductImage);
                     Log.d(TAG, "UnitPrice=" + UnitPrice);
                     Log.d(TAG, "Productbarcode=" + Productbarcode);
-
                     while (rs.next()) {
                         for (int i = 1; i <= columnCount; i++) {
+                            isExistData = true;
                             String columnName = metaData.getColumnName(i);
                             String columnValue = rs.getString(i);
                             Log.d(TAG, "columnName=" + columnName+"  columnValue="+columnValue);
@@ -252,34 +247,23 @@ public class TestActivity extends AppCompatActivity {
                     int updateCount = stmt.getUpdateCount();
                     resultBuilder.append("Update Count: ").append(updateCount);
                 }
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                    itemName.setText(mProduct.getName());
-//                    itemOriginalPrice.setText("¥" + mProduct.getPrice());
-//                    itemCurrentPrice.setText("¥" + mProduct.getPriceunt());
-//                    itemPriceUnit.setText("USD");
-//                    }
-//                    // 正确写法：添加 new 关键字
-//                    Bitmap bitmap = Picasso.get().load(mProduct.getImg()).get();
-//                    Drawable drawable = new BitmapDrawable(TestActivity.this.getResources(), bitmap); // 关键修正
-//                    itemImage.setImageDrawable(drawable);
-//
-//
-//
-//
-//                });
+                Log.d(TAG, "isExistData=" + isExistData);
 
                 runOnUiThread(() -> {
-                    itemName.setText(mProduct.getName());
-                    itemCurrentPrice.setText(mProduct.getPrice());
-                    itemPriceUnit.setText(mProduct.getPriceunt());
-                    Log.d(TAG, "mProduct=" + mProduct);
+                    if(!isExistData) {
+                        itemName.setText("Product name");
+                    }else{
+                        itemName.setText(mProduct.getName());
+                        itemCurrentPrice.setText(mProduct.getPrice());
+                        itemPriceUnit.setText(mProduct.getPriceunt());
+                        Log.d(TAG, "mProduct=" + mProduct);
 
-                    // 异步加载图片（Picasso自动处理线程切换）
-                    Picasso.get()
-                            .load(mProduct.getImg())
-                            .into(itemImage);
+
+                        Glide.with(TestActivity.this)
+                                .load(mProduct.getImg())
+                                .placeholder(R.drawable.loading)
+                                .into(itemImage);
+                    }
                 });
 
 

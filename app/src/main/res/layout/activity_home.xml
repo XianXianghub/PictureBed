@@ -16,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:scaleType="centerCrop"
-            android:contentDescription="商品图片"
             android:background="#f0f0f0"/>
 
         <!-- 商品名称 -->
@@ -27,7 +26,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"
-            android:text="商品名称"/>
+            android:text="Product name"/>
 
         <!-- 价格区域 -->
         <LinearLayout
@@ -44,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="#FF5722"
-                android:text="¥100"/>
+                android:text="$100"/>
 
             <!-- 价格单位 -->
             <TextView
