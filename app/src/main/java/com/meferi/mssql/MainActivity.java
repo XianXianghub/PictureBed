@@ -2,7 +2,6 @@ package com.meferi.mssql;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -41,13 +40,13 @@ public class MainActivity extends AppCompatActivity {
         editUser = findViewById(R.id.editUser);
         editPassword = findViewById(R.id.editPassword);
         textResult = findViewById(R.id.textResult);
-        editSql = findViewById(R.id.editSql);
+//        editSql = findViewById(R.id.editSql);
         editDatabase = findViewById(R.id.editDatabase);
         editPort = findViewById(R.id.editPort);
 
-        Button btnConnect = findViewById(R.id.btnConnect);
+//        Button btnConnect = findViewById(R.id.btnConnect);
 
-        btnConnect.setOnClickListener(v -> connectToDatabase());
+//        btnConnect.setOnClickListener(v -> connectToDatabase());
     }
 
     private void connectToDatabase() {

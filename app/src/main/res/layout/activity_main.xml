@@ -47,21 +47,6 @@
         android:hint="Password"
         android:text="PXcLiNZ@Vu&amp;6" />
 
-    <EditText
-        android:id="@+id/editSql"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top|start"
-        android:hint="Enter SQL query"
-        android:inputType="textMultiLine"
-        android:lines="4"
-        android:text="SELECT * FROM goods" />
-
-    <Button
-        android:id="@+id/btnConnect"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Connect and Query" />
 
     <ScrollView
         android:layout_width="match_parent"

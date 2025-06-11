@@ -34,14 +34,17 @@
             android:id="@+id/editPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="*Password"
-            android:inputType="textPassword" />
+            android:hint="*Password" />
         <EditText
             android:id="@+id/editDatabaseName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="*Database Name" />
-
+        <EditText
+            android:id="@+id/editTableName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="*Table Name" />
         <EditText
             android:id="@+id/editPort"
             android:layout_width="match_parent"

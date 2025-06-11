@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private EditText editApiAddress, editUsername, editPassword, editDatabaseName, editPort;
+    private EditText editApiAddress, editUsername, editPassword, editDatabaseName, editPort, editTableName;
     private EditText editProductName, editProductPrice, editProductImage, editUnitPrice, editBarcode;
 
     @Override
@@ -33,6 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
         editProductImage = findViewById(R.id.editProductImage);
         editUnitPrice = findViewById(R.id.editUnitPrice);
         editBarcode = findViewById(R.id.editBarcode);
+        editTableName = findViewById(R.id.editTableName);
 
         Button btnSave = findViewById(R.id.btnSave);
         Button btnCancel = findViewById(R.id.btnCancel);
@@ -50,7 +51,7 @@ public class SettingsActivity extends AppCompatActivity {
         editProductImage.setText(prefs.getString(Constants.KEY_PRODUCT_IMAGE, Constants.DEFAULT_PRODUCT_IMAGE));
         editUnitPrice.setText(prefs.getString(Constants.KEY_UNIT_PRICE, Constants.DEFAULT_UNIT_PRICE));
         editBarcode.setText(prefs.getString(Constants.KEY_BARCODE, Constants.DEFAULT_BARCODE));
-
+        editTableName.setText(prefs.getString(Constants.KEY_TABLE_NAME, Constants.DEFAULT_TABLE_NAME));
         btnSave.setOnClickListener(v -> {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(Constants.KEY_API_ADDRESS, editApiAddress.getText().toString().trim());
@@ -63,6 +64,7 @@ public class SettingsActivity extends AppCompatActivity {
             editor.putString(Constants.KEY_PRODUCT_IMAGE, editProductImage.getText().toString().trim());
             editor.putString(Constants.KEY_UNIT_PRICE, editUnitPrice.getText().toString().trim());
             editor.putString(Constants.KEY_BARCODE, editBarcode.getText().toString().trim());
+            editor.putString(Constants.KEY_TABLE_NAME, editTableName.getText().toString().trim());
             editor.apply();
             finish(); // 保存后退出
         });
