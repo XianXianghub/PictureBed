@@ -1,0 +1,127 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Server Configuration -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Server configuration"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+        <EditText
+            android:id="@+id/editApiAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="*API Address" />
+
+
+        <EditText
+            android:id="@+id/editUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="*Username" />
+
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="*Password"
+            android:inputType="textPassword" />
+        <EditText
+            android:id="@+id/editDatabaseName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="*Database Name" />
+
+        <EditText
+            android:id="@+id/editPort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="*Port"
+            android:inputType="number" />
+
+
+        <!-- Product Parameter Configuration -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product parameter configuration"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:paddingTop="24dp"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please enter the ID corresponding to the product information field."
+            android:textColor="#A00000"
+            android:textSize="12sp"
+            android:paddingBottom="8dp" />
+
+        <EditText
+            android:id="@+id/editProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product Name" />
+
+        <EditText
+            android:id="@+id/editProductPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product Price" />
+
+        <EditText
+            android:id="@+id/editProductImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product Image" />
+
+        <EditText
+            android:id="@+id/editUnitPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Unit Price" />
+        <EditText
+            android:id="@+id/editBarcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Barcode" />
+
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="end"
+            android:paddingTop="24dp">
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cancel" />
+
+            <Space
+                android:layout_width="16dp"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

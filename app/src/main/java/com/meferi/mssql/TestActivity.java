@@ -1,7 +1,13 @@
 package com.meferi.mssql;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -15,63 +21,57 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
 
-    private EditText editIp, editUser, editPassword;
+public class TestActivity extends AppCompatActivity {
+
     private TextView textResult;
-    private Random random = new Random();
-    private EditText editSql;  // Add this field
-    private EditText editDatabase; // add this field
-    private EditText editPort; // Add this field
+    private EditText editSql;
+    private final Random random = new Random();
+    private static final String PREFS_NAME = "db_settings";
 
-    private int colorIndex = 0;
     private final int[] rgbColors = {
             Color.RED,
             Color.GREEN,
             Color.BLUE
     };
-
+    private int colorIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_home);
 
-        editIp = findViewById(R.id.editIp);
-        editUser = findViewById(R.id.editUser);
-        editPassword = findViewById(R.id.editPassword);
-        textResult = findViewById(R.id.textResult);
         editSql = findViewById(R.id.editSql);
-        editDatabase = findViewById(R.id.editDatabase);
-        editPort = findViewById(R.id.editPort);
-
+        textResult = findViewById(R.id.textResult);
         Button btnConnect = findViewById(R.id.btnConnect);
 
         btnConnect.setOnClickListener(v -> connectToDatabase());
     }
 
     private void connectToDatabase() {
-        String ip = editIp.getText().toString().trim();
-        String user = editUser.getText().toString().trim();
-        String password = editPassword.getText().toString().trim();
         String sql = editSql.getText().toString().trim();
-        String database = editDatabase.getText().toString().trim();
-        String port = editPort.getText().toString().trim();
 
         if (sql.isEmpty()) {
             runOnUiThread(() -> textResult.setText("Please enter an SQL query."));
             return;
         }
 
+        // 从 SharedPreferences 获取配置
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        String ip = prefs.getString(Constants.PREFS_IP, Constants.DEFAULT_API_ADDRESS);
+        String user = prefs.getString(Constants.PREFS_USER, Constants.DEFAULT_USERNAME);
+        String password = prefs.getString(Constants.PREFS_PASSWORD, Constants.DEFAULT_PASSWORD);
+        String database = prefs.getString(Constants.PREFS_DATABASE, Constants.DEFAULT_DATABASE_NAME);
+        String port = prefs.getString(Constants.PREFS_PORT, Constants.DEFAULT_PORT);
         new Thread(() -> {
             try {
                 Class.forName("net.sourceforge.jtds.jdbc.Driver");
-                String url = "jdbc:jtds:sqlserver://" + ip + ":" + port + "/" + database + ";user=" + user + ";password=" + password + ";";
+                String url = "jdbc:jtds:sqlserver://" + ip + ":" + port + "/" + database +
+                        ";user=" + user + ";password=" + password + ";";
 
-
+                Log.d("ddd", "url="+url);
                 Connection connection = DriverManager.getConnection(url);
                 Statement stmt = connection.createStatement();
-
                 boolean hasResultSet = stmt.execute(sql);
 
                 StringBuilder resultBuilder = new StringBuilder();
@@ -86,23 +86,18 @@ public class MainActivity extends AppCompatActivity {
                             String columnName = metaData.getColumnName(i);
                             String columnValue = rs.getString(i);
                             resultBuilder.append(columnName).append("=").append(columnValue);
-                            if (i < columnCount) {
-                                resultBuilder.append(", ");
-                            }
+                            if (i < columnCount) resultBuilder.append(", ");
                         }
                         resultBuilder.append("\n");
                     }
                     rs.close();
                 } else {
-                    // For update/insert/delete, get update count
                     int updateCount = stmt.getUpdateCount();
                     resultBuilder.append("Update Count: ").append(updateCount);
                 }
 
-
                 stmt.close();
                 connection.close();
-
 
                 runOnUiThread(() -> {
                     textResult.setText(resultBuilder.toString());
@@ -118,5 +113,22 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+
+    // 添加设置按钮
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

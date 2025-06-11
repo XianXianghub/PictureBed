@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:hint="Server IP (e.g. 192.168.101.80)"
         android:inputType="text"
-        android:text="110.40.36.231" />
+        android:text="192.168.101.80" />
 
 <!--    192.168.101.80-->
 
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:hint="Port"
         android:inputType="number"
-        android:text="30898" />
+        android:text="1433" />
     <!--    1433  -->
 
 
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:hint="Database Name"
         android:inputType="text"
-        android:text="meferrDB" />
+        android:text="master" />
 
     <EditText
         android:id="@+id/editUser"
@@ -55,7 +55,7 @@
         android:hint="Enter SQL query"
         android:inputType="textMultiLine"
         android:lines="4"
-        android:text="SELECT * FROM Employees" />
+        android:text="SELECT * FROM goods" />
 
     <Button
         android:id="@+id/btnConnect"
