@@ -33,7 +33,7 @@ public class Constants {
     public static final String DEFAULT_PRODUCT_PRICE = "price";
     public static final String DEFAULT_PRODUCT_IMAGE = "img";
     public static final String DEFAULT_UNIT_PRICE = "price_unit";
-    public static final String DEFAULT_BARCODE = "qr";
+    public static final String DEFAULT_BARCODE = "barcode";
 
 
 

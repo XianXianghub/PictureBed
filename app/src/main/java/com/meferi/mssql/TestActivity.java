@@ -74,7 +74,7 @@ public class TestActivity extends AppCompatActivity {
                 {
                     Log.i(TAG, "Key=" + key + ", content=" +bundle.getString(key));
                 }
-                String sql = "SELECT * FROM "+table+" WHERE qr = '"+val+"'";
+                String sql = "SELECT * FROM "+table+" WHERE "+Productbarcode+" = '"+val+"'";
                 connectToDatabase(sql);
             }
         }
@@ -129,6 +129,21 @@ public class TestActivity extends AppCompatActivity {
         database = prefs.getString(Constants.KEY_DATABASE_NAME, Constants.DEFAULT_DATABASE_NAME);
         table = prefs.getString(Constants.KEY_TABLE_NAME, Constants.DEFAULT_TABLE_NAME);
         port = prefs.getString(Constants.KEY_PORT, Constants.DEFAULT_PORT);
+
+        // Product related variables
+        Log.d(TAG, "Product Barcode: " + Productbarcode);
+        Log.d(TAG, "Product Name: " + ProductName);
+        Log.d(TAG, "Product Price: " + ProductPrice);
+        Log.d(TAG, "Product Image: " + ProductImage);
+        Log.d(TAG, "Unit Price: " + UnitPrice);
+
+// API/connection related variables
+        Log.d(TAG, "IP: " + ip);
+        Log.d(TAG, "User: " + user);
+        Log.d(TAG, "Password: " + password); // Be careful with logging passwords in production!
+        Log.d(TAG, "Database: " + database);
+        Log.d(TAG, "Table: " + table);
+        Log.d(TAG, "Port: " + port);
     }
 
     private static void setDefaultIfNotExists(SharedPreferences prefs, SharedPreferences.Editor editor,
@@ -168,7 +183,7 @@ public class TestActivity extends AppCompatActivity {
         // Register the broadcast receiver
         IntentFilter intFilter = new IntentFilter();
         intFilter.addAction(ACTION_SEND_RESULT);
-        registerReceiver(mResultReceiver, intFilter);
+        registerReceiver(mResultReceiver, intFilter,Context.RECEIVER_EXPORTED);
 
         initDefaults();
 
