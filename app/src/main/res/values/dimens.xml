@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="setting_item_spacing">0dp</dimen>
+    <dimen name="setting_edit_spacing">0dp</dimen>
+    <dimen name="setting_item_title_width">1</dimen>
+
+</resources>

@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">mssql</string>
+    <string name="server_config_title">Server configuration</string>
+    <string name="product_param_config_title">Product parameter configuration</string>
+    <string name="product_param_config_subtip">Please enter the ID corresponding to the product information field.</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+
 </resources>

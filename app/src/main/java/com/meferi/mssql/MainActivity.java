@@ -2,6 +2,7 @@ package com.meferi.mssql;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -29,20 +30,38 @@ public class MainActivity extends AppCompatActivity {
             Color.GREEN,
             Color.BLUE
     };
-
-
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+        );
+    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        super.onWindowFocusChanged(hasFocus);
+//        if (hasFocus) {
+//            hideSystemUI();
+//        }
+//    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_server_config);
+        getSupportActionBar().hide();
+        hideSystemUI();
 
-        editIp = findViewById(R.id.editIp);
-        editUser = findViewById(R.id.editUser);
-        editPassword = findViewById(R.id.editPassword);
-        textResult = findViewById(R.id.textResult);
-//        editSql = findViewById(R.id.editSql);
-        editDatabase = findViewById(R.id.editDatabase);
-        editPort = findViewById(R.id.editPort);
+//        editIp = findViewById(R.id.editIp);
+//        editUser = findViewById(R.id.editUser);
+//        editPassword = findViewById(R.id.editPassword);
+//        textResult = findViewById(R.id.textResult);
+////        editSql = findViewById(R.id.editSql);
+//        editDatabase = findViewById(R.id.editDatabase);
+//        editPort = findViewById(R.id.editPort);
 
 //        Button btnConnect = findViewById(R.id.btnConnect);
 

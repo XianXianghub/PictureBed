@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+    Server & Product configuration page for tablet (mdpi 240dpi).
+    Top bar: logo (51dp height) + gray divider
+    Main area: ScrollView with all form fields and action buttons
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- ========= Top logo bar ========== -->
+    <LinearLayout
+        android:id="@+id/ll_logo"
+        android:layout_width="match_parent"
+        android:layout_height="51dp"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="174dp"
+            android:layout_height="51dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_meferi_logo" />
+    </LinearLayout>
+
+    <!-- ======= Divider line below logo ======= -->
+    <View
+        android:id="@+id/logo_divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="#CCCCCC"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_logo" />
+
+    <!-- ========== Main scrollable form area ========== -->
+    <ScrollView
+        android:id="@+id/sv_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logo_divider">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- ===== Section: Server configuration ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/server_config_title"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- API Address -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_item_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="*API Address:" />
+
+                <EditText
+                    android:id="@+id/et_api_address"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="https://example.com/api"
+                    android:inputType="textUri" />
+            </LinearLayout>
+
+            <!-- Server Name -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="*Server Name:" />
+
+                <EditText
+                    android:id="@+id/et_server_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="my_server"
+                    android:inputType="textPersonName" />
+            </LinearLayout>
+
+            <!-- Username -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="*Username:" />
+
+                <EditText
+                    android:id="@+id/et_username"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="admin"
+                    android:inputType="textEmailAddress" />
+            </LinearLayout>
+
+            <!-- Password -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="*Password:" />
+
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="******"
+                    android:inputType="textPassword" />
+            </LinearLayout>
+
+            <!-- ===== Divider between two sections ===== -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="#CCCCCC" />
+
+            <!--            &lt;!&ndash; ===== Section: Product parameter configuration ===== &ndash;&gt;-->
+            <!--            <TextView-->
+            <!--                android:text="@string/product_param_config_title"-->
+            <!--                android:textStyle="bold"-->
+            <!--                android:textSize="14sp"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content" />-->
+
+            <!--            <TextView-->
+            <!--                android:text="@string/product_param_config_subtip"-->
+            <!--                android:textSize="14sp"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="4dp" />-->
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/product_param_config_title"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="@string/product_param_config_subtip"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <!-- Product Name -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_item_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="Product Name:" />
+
+                <EditText
+                    android:id="@+id/et_product_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="Coffee"
+                    android:inputType="textCapWords" />
+            </LinearLayout>
+
+            <!-- Product Price -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="Product Price:" />
+
+                <EditText
+                    android:id="@+id/et_product_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="12.99"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <!-- Product Image -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="Product Image:" />
+
+                <EditText
+                    android:id="@+id/et_product_image"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="image_01"
+                    android:inputType="text" />
+            </LinearLayout>
+
+            <!-- Unit Price -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="Unit Price:" />
+
+                <EditText
+                    android:id="@+id/et_unit_price"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="2.50"
+                    android:inputType="numberDecimal" />
+            </LinearLayout>
+
+            <!-- ===== Action buttons ===== -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cancel"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_cancel_bg"
+                    android:textColor="@android:color/black" />
+
+                <Button
+                    android:id="@+id/btn_save"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save"
+                    android:layout_marginStart="24dp"
+                    android:textAllCaps="false"
+                    android:background="@drawable/button_save_bg"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
