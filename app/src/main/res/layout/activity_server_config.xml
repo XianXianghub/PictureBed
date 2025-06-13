@@ -73,14 +73,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="*API Address:" />
+                    android:text="Server Address:" />
 
                 <EditText
-                    android:id="@+id/et_api_address"
+                    android:id="@+id/editApiAddress"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:hint="https://example.com/api"
+                    android:hint="*Server Address"
                     android:inputType="textUri" />
             </LinearLayout>
 
@@ -95,14 +95,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="*Server Name:" />
+                    android:text="Port:" />
 
                 <EditText
-                    android:id="@+id/et_server_name"
+                    android:id="@+id/editPort"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:hint="my_server"
+                    android:hint="*Port"
                     android:inputType="textPersonName" />
             </LinearLayout>
 
@@ -117,14 +117,14 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="*Username:" />
+                    android:text="Username:" />
 
                 <EditText
-                    android:id="@+id/et_username"
+                    android:id="@+id/editUsername"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:hint="admin"
+                    android:hint="Username"
                     android:inputType="textEmailAddress" />
             </LinearLayout>
 
@@ -139,15 +139,56 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="*Password:" />
+                    android:text="Password:" />
 
                 <EditText
-                    android:id="@+id/et_password"
+                    android:id="@+id/editPassword"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:hint="******"
-                    android:inputType="textPassword" />
+                    android:hint="Password" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="Database Name:" />
+
+                <EditText
+                    android:id="@+id/editDatabaseName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="Database Name" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="Table Name:" />
+
+                <EditText
+                    android:id="@+id/editTableName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="Table Name" />
             </LinearLayout>
 
             <!-- ===== Divider between two sections ===== -->
@@ -158,20 +199,6 @@
                 android:layout_marginBottom="16dp"
                 android:background="#CCCCCC" />
 
-            <!--            &lt;!&ndash; ===== Section: Product parameter configuration ===== &ndash;&gt;-->
-            <!--            <TextView-->
-            <!--                android:text="@string/product_param_config_title"-->
-            <!--                android:textStyle="bold"-->
-            <!--                android:textSize="14sp"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content" />-->
-
-            <!--            <TextView-->
-            <!--                android:text="@string/product_param_config_subtip"-->
-            <!--                android:textSize="14sp"-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:layout_marginTop="4dp" />-->
 
 
             <LinearLayout
@@ -194,6 +221,27 @@
                     android:text="@string/product_param_config_subtip"
                     android:textSize="12sp" />
             </LinearLayout>
+            <!-- barcode  -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/setting_item_spacing"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:text="Barcode:" />
+
+                <EditText
+                    android:id="@+id/editBarcode"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="7"
+                    android:hint="Barcode"
+                    android:inputType="textCapWords" />
+            </LinearLayout>
 
             <!-- Product Name -->
             <LinearLayout
@@ -209,7 +257,7 @@
                     android:text="Product Name:" />
 
                 <EditText
-                    android:id="@+id/et_product_name"
+                    android:id="@+id/editProductName"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
@@ -231,7 +279,7 @@
                     android:text="Product Price:" />
 
                 <EditText
-                    android:id="@+id/et_product_price"
+                    android:id="@+id/editProductPrice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
@@ -253,7 +301,7 @@
                     android:text="Product Image:" />
 
                 <EditText
-                    android:id="@+id/et_product_image"
+                    android:id="@+id/editProductImage"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
@@ -275,7 +323,7 @@
                     android:text="Unit Price:" />
 
                 <EditText
-                    android:id="@+id/et_unit_price"
+                    android:id="@+id/editUnitPrice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"

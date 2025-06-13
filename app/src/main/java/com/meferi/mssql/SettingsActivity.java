@@ -5,6 +5,7 @@ package com.meferi.mssql;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -14,14 +15,23 @@ public class SettingsActivity extends AppCompatActivity {
 
     private EditText editApiAddress, editUsername, editPassword, editDatabaseName, editPort, editTableName;
     private EditText editProductName, editProductPrice, editProductImage, editUnitPrice, editBarcode;
-
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+        );
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_new); // 替换为你的布局名
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        setContentView(R.layout.activity_server_config); // 替换为你的布局名
+        getSupportActionBar().hide();
+        hideSystemUI();
         // 初始化 EditText
         editApiAddress = findViewById(R.id.editApiAddress);
         editUsername = findViewById(R.id.editUsername);
@@ -35,8 +45,8 @@ public class SettingsActivity extends AppCompatActivity {
         editBarcode = findViewById(R.id.editBarcode);
         editTableName = findViewById(R.id.editTableName);
 
-        Button btnSave = findViewById(R.id.btnSave);
-        Button btnCancel = findViewById(R.id.btnCancel);
+        Button btnSave = findViewById(R.id.btn_save);
+        Button btnCancel = findViewById(R.id.btn_cancel);
 
         SharedPreferences prefs = getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE);
 
