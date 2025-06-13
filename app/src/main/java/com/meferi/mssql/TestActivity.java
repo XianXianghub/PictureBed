@@ -25,6 +25,8 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
+import kotlin.jvm.internal.Intrinsics;
+
 
 public class TestActivity extends AppCompatActivity {
 
@@ -138,6 +140,14 @@ public class TestActivity extends AppCompatActivity {
         Log.d(TAG, "Port: " + port);
         Utils.putBoolean("IsLogin", true);
 
+    }
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(5894);
+        }
     }
 
     private static void setDefaultIfNotExists(SharedPreferences prefs, SharedPreferences.Editor editor,
@@ -266,7 +276,7 @@ public class TestActivity extends AppCompatActivity {
                     resultBuilder.append("Update Count: ").append(updateCount);
                 }
                 Log.d(TAG, "isExistData=" + isExistData);
-
+                mProduct.setDbinfo(resultBuilder.toString());
                 runOnUiThread(() -> {
                     if(!isExistData) {
 

@@ -7,20 +7,32 @@ public class ProductBean implements Parcelable {
     private String name;
     private String price;
     private String barcode;
+    private String dbinfo;
+
+    public String getDbinfo() {
+        return dbinfo;
+    }
+
+    public void setDbinfo(String dbinfo) {
+        this.dbinfo = dbinfo;
+    }
 
     protected ProductBean(Parcel in) {
         name = in.readString();
         price = in.readString();
         barcode = in.readString();
+        dbinfo = in.readString();
         priceunt = in.readString();
         img = in.readString();
     }
+
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(price);
         dest.writeString(barcode);
+        dest.writeString(dbinfo);
         dest.writeString(priceunt);
         dest.writeString(img);
     }
@@ -41,17 +53,6 @@ public class ProductBean implements Parcelable {
             return new ProductBean[size];
         }
     };
-
-    @Override
-    public String toString() {
-        return "Product{" +
-                "name='" + name + '\'' +
-                ", price='" + price + '\'' +
-                ", barcode='" + barcode + '\'' +
-                ", priceunt='" + priceunt + '\'' +
-                ", img='" + img + '\'' +
-                '}';
-    }
 
     public String getBarcode() {
         return barcode;

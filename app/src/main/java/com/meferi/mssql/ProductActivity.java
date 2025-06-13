@@ -70,7 +70,14 @@ public class ProductActivity extends AppCompatActivity {
             }
         }
     };
-
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(5894);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,11 +113,17 @@ public class ProductActivity extends AppCompatActivity {
         tvProductName.setText(product.getName());
         tvWeight.setText(product.getPriceunt()); // 这里把单位放到 weight 框，可根据实际需求调整
         tvBarCode.setText(product.getBarcode());
-        tvInfo.setText(product.toString());
+        tvInfo.setText(product.getDbinfo());
 
-        Glide.with(ProductActivity.this)
-        .load(product.getImg())
-        .placeholder(R.drawable.loading)
-        .into(image);
+
+
+        new Handler().post(() -> {
+            Glide.with(ProductActivity.this)
+                    .load(product.getImg())
+                    .override(476, 476)
+                    .placeholder(R.drawable.loading)
+                    .centerCrop()
+                    .into(image);
+        });
     }
 }
