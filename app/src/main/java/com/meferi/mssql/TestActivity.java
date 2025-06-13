@@ -13,13 +13,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import com.bumptech.glide.Glide;
 import com.meferi.sdk.ParameterID;
 import com.meferi.sdk.ScanManager;
 
@@ -45,15 +41,11 @@ public class TestActivity extends AppCompatActivity {
     private String database;
     private String table;
     private String port;
-    private Product mProduct;
+    private ProductBean mProduct;
     private boolean isExistData = false;
 
 
-    private ImageView itemImage;
-    private TextView itemName, itemCurrentPrice, itemPriceUnit;
 
-
-    private TextView textResult;
 
 
     // Action and extra keys for the broadcast
@@ -108,14 +100,13 @@ public class TestActivity extends AppCompatActivity {
 
         editor.apply();
 
-        itemImage.setImageDrawable(null);
-        itemImage.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_background));
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Utils.init(this);
+
         SharedPreferences prefs = getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE);
         Productbarcode =  prefs.getString(Constants.KEY_BARCODE, Constants.DEFAULT_BARCODE);
         ProductName =  prefs.getString(Constants.KEY_PRODUCT_NAME, Constants.DEFAULT_PRODUCT_NAME);
@@ -145,6 +136,8 @@ public class TestActivity extends AppCompatActivity {
         Log.d(TAG, "Database: " + database);
         Log.d(TAG, "Table: " + table);
         Log.d(TAG, "Port: " + port);
+        Utils.putBoolean("IsLogin", true);
+
     }
 
     private static void setDefaultIfNotExists(SharedPreferences prefs, SharedPreferences.Editor editor,
@@ -164,19 +157,21 @@ public class TestActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
         );
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        setContentView(R.layout.activity_product_home);
+        getSupportActionBar().hide();
+        hideSystemUI();
 
-        textResult = findViewById(R.id.textResult);
+        findViewById(R.id.btn_settings).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(TestActivity.this, SettingsActivity.class));
+            }
+        });
 
-
-
-        itemImage = findViewById(R.id.itemImage);
-        itemName = findViewById(R.id.itemName);
-        itemCurrentPrice = findViewById(R.id.itemCurrentPrice);
-        itemPriceUnit = findViewById(R.id.itemPriceUnit);
 
         // Initialize scanner manager
         mScannerManager = new ScanManager();
@@ -205,13 +200,10 @@ public class TestActivity extends AppCompatActivity {
     private void connectToDatabase(String sql) {
 
         if (sql.isEmpty()) {
-            runOnUiThread(() -> textResult.setText("Please enter an SQL query."));
             return;
         }
 
 
-        itemImage.setImageDrawable(null);
-        itemImage.setBackgroundColor(ContextCompat.getColor(this, R.color.gray_background));
 
         isExistData = false;
 
@@ -227,7 +219,7 @@ public class TestActivity extends AppCompatActivity {
                 boolean hasResultSet = stmt.execute(sql);
 
                 StringBuilder resultBuilder = new StringBuilder();
-                mProduct = new Product();
+                mProduct = new ProductBean();
 
                 if (hasResultSet) {
                     ResultSet rs = stmt.getResultSet();
@@ -277,18 +269,32 @@ public class TestActivity extends AppCompatActivity {
 
                 runOnUiThread(() -> {
                     if(!isExistData) {
-                        itemName.setText("Product name");
+
                     }else{
-                        itemName.setText(mProduct.getName());
-                        itemCurrentPrice.setText(mProduct.getPrice());
-                        itemPriceUnit.setText(mProduct.getPriceunt());
+                        boolean IsLogin = Utils.getBoolean("IsLogin", true);
+                        if (IsLogin) {
+                            Utils.putBoolean("IsLogin", false);
+                            Intent intent = new Intent(TestActivity.this, ProductActivity.class);
+                            intent.putExtra("product_key", mProduct);
+                            startActivity(intent);
+                            return;
+                        }
+                        Intent intent3 = new Intent();
+                        intent3.setAction("com.meferi.action.CMD.QUICKSCAN");
+                        intent3.putExtra("barcode", mProduct.getBarcode());
+                        TestActivity.this.sendBroadcast(intent3);
+
+
+//                        itemName.setText(mProduct.getName());
+//                        itemCurrentPrice.setText(mProduct.getPrice());
+//                        itemPriceUnit.setText(mProduct.getPriceunt());
                         Log.d(TAG, "mProduct=" + mProduct);
 
-
-                        Glide.with(TestActivity.this)
-                                .load(mProduct.getImg())
-                                .placeholder(R.drawable.loading)
-                                .into(itemImage);
+//
+//                        Glide.with(TestActivity.this)
+//                                .load(mProduct.getImg())
+//                                .placeholder(R.drawable.loading)
+//                                .into(itemImage);
                     }
                 });
 
@@ -297,18 +303,18 @@ public class TestActivity extends AppCompatActivity {
                 stmt.close();
                 connection.close();
 
-                runOnUiThread(() -> {
-                    textResult.setText(resultBuilder.toString());
-                    textResult.setTextColor(rgbColors[colorIndex]);
-                    colorIndex = (colorIndex + 1) % rgbColors.length;
-                });
+//                runOnUiThread(() -> {
+//                    textResult.setText(resultBuilder.toString());
+//                    textResult.setTextColor(rgbColors[colorIndex]);
+//                    colorIndex = (colorIndex + 1) % rgbColors.length;
+//                });
 
             } catch (Exception e) {
                 e.printStackTrace();
-                runOnUiThread(() -> {
-                    textResult.setText("Error:\n" + e.getMessage());
-                    textResult.setTextColor(Color.RED);
-                });
+//                runOnUiThread(() -> {
+//                    textResult.setText("Error:\n" + e.getMessage());
+//                    textResult.setTextColor(Color.RED);
+//                });
             }
         }).start();
     }

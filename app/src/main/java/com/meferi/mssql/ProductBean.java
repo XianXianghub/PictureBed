@@ -1,9 +1,46 @@
 package com.meferi.mssql;
 
-public class Product {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ProductBean implements Parcelable {
     private String name;
     private String price;
     private String barcode;
+
+    protected ProductBean(Parcel in) {
+        name = in.readString();
+        price = in.readString();
+        barcode = in.readString();
+        priceunt = in.readString();
+        img = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(price);
+        dest.writeString(barcode);
+        dest.writeString(priceunt);
+        dest.writeString(img);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<ProductBean> CREATOR = new Creator<ProductBean>() {
+        @Override
+        public ProductBean createFromParcel(Parcel in) {
+            return new ProductBean(in);
+        }
+
+        @Override
+        public ProductBean[] newArray(int size) {
+            return new ProductBean[size];
+        }
+    };
 
     @Override
     public String toString() {
@@ -29,7 +66,7 @@ public class Product {
     private String priceunt;
     private String img;
 
-    public Product() {
+    public ProductBean() {
         // 默认构造函数
     }
 
