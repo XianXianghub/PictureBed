@@ -5,27 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.meferi.sdk.ParameterID;
 import com.meferi.sdk.ScanManager;
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
-
-import kotlin.jvm.internal.Intrinsics;
 
 
 public class TestActivity extends AppCompatActivity {
@@ -43,18 +31,16 @@ public class TestActivity extends AppCompatActivity {
     private String database;
     private String table;
     private String port;
-    private ProductBean mProduct;
-    private boolean isExistData = false;
+
+    private boolean isPaused = false;
 
 
 
 
 
-    // Action and extra keys for the broadcast
     private String ACTION_SEND_RESULT = "android.intent.action.MEF_ACTION";
     private String EXTRA_SCAN_BARCODE = "android.intent.action.MEF_DATA1";
 
-    // BroadcastReceiver to handle scan results
     private BroadcastReceiver mResultReceiver = new BroadcastReceiver() {
 
         @Override
@@ -63,24 +49,28 @@ public class TestActivity extends AppCompatActivity {
             if (ACTION_SEND_RESULT.equals(action)) {
                 // Get the scanned barcode from the intent
                 String val = intent.getStringExtra(EXTRA_SCAN_BARCODE);
-
-                Bundle bundle = intent.getExtras();
-                for (String key: bundle.keySet())
-                {
-                    Log.i(TAG, "Key=" + key + ", content=" +bundle.getString(key));
+                ProductBean mProductBean = new ProductBean();
+                mProductBean.setBarcode(val);
+                boolean IsLogin = Utils.getBoolean("IsLogin", true);
+                Log.d("ProductActivity", "isPaused="+isPaused);
+                if (!isPaused) {
+                    Utils.putBoolean("IsLogin", false);
+                    Intent pintent = new Intent(TestActivity.this, ProductActivity.class);
+                    pintent.putExtra("product_key", mProductBean);
+                    startActivity(pintent);
+                    return;
                 }
-                String sql = "SELECT * FROM "+table+" WHERE "+Productbarcode+" = '"+val+"'";
-                connectToDatabase(sql);
+                Intent intent3 = new Intent();
+                intent3.setAction("com.meferi.action.CMD.QUICKSCAN.RESULT");
+                intent3.putExtra("barcode", val);
+                TestActivity.this.sendBroadcast(intent3);
+
             }
         }
     };
 
-    private final int[] rgbColors = {
-            Color.RED,
-            Color.GREEN,
-            Color.BLUE
-    };
-    private int colorIndex = 0;
+
+
 
 
     public  void initDefaults() {
@@ -138,9 +128,15 @@ public class TestActivity extends AppCompatActivity {
         Log.d(TAG, "Database: " + database);
         Log.d(TAG, "Table: " + table);
         Log.d(TAG, "Port: " + port);
-        Utils.putBoolean("IsLogin", true);
-
+        isPaused = false;
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        isPaused = true;
+    }
+
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
@@ -207,144 +203,8 @@ public class TestActivity extends AppCompatActivity {
 
     }
 
-    private void connectToDatabase(String sql) {
-
-        if (sql.isEmpty()) {
-            return;
-        }
 
 
-
-        isExistData = false;
-
-        new Thread(() -> {
-            try {
-                Class.forName("net.sourceforge.jtds.jdbc.Driver");
-                String url = "jdbc:jtds:sqlserver://" + ip + ":" + port + "/" + database +
-                        ";user=" + user + ";password=" + password + ";";
-
-                Log.d("ddd", "url="+url);
-                Connection connection = DriverManager.getConnection(url);
-                Statement stmt = connection.createStatement();
-                boolean hasResultSet = stmt.execute(sql);
-
-                StringBuilder resultBuilder = new StringBuilder();
-                mProduct = new ProductBean();
-
-                if (hasResultSet) {
-                    ResultSet rs = stmt.getResultSet();
-                    ResultSetMetaData metaData = rs.getMetaData();
-                    int columnCount = metaData.getColumnCount();
-
-
-//                    private String barcode ;
-//                    private String ProductName ;
-//                    private String ProductPrice ;
-//                    private String ProductImage ;
-//                    private String UnitPrice ;
-                    Log.d(TAG, "ProductName=" + ProductName);
-                    Log.d(TAG, "ProductPrice=" + ProductPrice);
-                    Log.d(TAG, "ProductImage=" + ProductImage);
-                    Log.d(TAG, "UnitPrice=" + UnitPrice);
-                    Log.d(TAG, "Productbarcode=" + Productbarcode);
-                    while (rs.next()) {
-                        for (int i = 1; i <= columnCount; i++) {
-                            isExistData = true;
-                            String columnName = metaData.getColumnName(i);
-                            String columnValue = rs.getString(i);
-                            Log.d(TAG, "columnName=" + columnName+"  columnValue="+columnValue);
-
-                            if(columnName.equals(ProductName)){
-                                mProduct.setName(columnValue);
-                            } else if(columnName.equals(ProductPrice)){
-                                mProduct.setPrice(columnValue);
-                            }else if(columnName.equals(ProductImage)){
-                                mProduct.setImg(columnValue);
-                            }else if(columnName.equals(UnitPrice)){
-                                mProduct.setPriceunt(columnValue);
-                            }else if(columnName.equals(Productbarcode)){
-                                mProduct.setBarcode(columnValue);
-                            }
-                            resultBuilder.append(columnName).append("=").append(columnValue);
-                            if (i < columnCount) resultBuilder.append(", ");
-                        }
-                        resultBuilder.append("\n");
-                    }
-                    rs.close();
-                } else {
-                    int updateCount = stmt.getUpdateCount();
-                    resultBuilder.append("Update Count: ").append(updateCount);
-                }
-                Log.d(TAG, "isExistData=" + isExistData);
-                mProduct.setDbinfo(resultBuilder.toString());
-                runOnUiThread(() -> {
-                    if(!isExistData) {
-
-                    }else{
-                        boolean IsLogin = Utils.getBoolean("IsLogin", true);
-                        if (IsLogin) {
-                            Utils.putBoolean("IsLogin", false);
-                            Intent intent = new Intent(TestActivity.this, ProductActivity.class);
-                            intent.putExtra("product_key", mProduct);
-                            startActivity(intent);
-                            return;
-                        }
-                        Intent intent3 = new Intent();
-                        intent3.setAction("com.meferi.action.CMD.QUICKSCAN");
-                        intent3.putExtra("barcode", mProduct.getBarcode());
-                        TestActivity.this.sendBroadcast(intent3);
-
-
-//                        itemName.setText(mProduct.getName());
-//                        itemCurrentPrice.setText(mProduct.getPrice());
-//                        itemPriceUnit.setText(mProduct.getPriceunt());
-                        Log.d(TAG, "mProduct=" + mProduct);
-
-//
-//                        Glide.with(TestActivity.this)
-//                                .load(mProduct.getImg())
-//                                .placeholder(R.drawable.loading)
-//                                .into(itemImage);
-                    }
-                });
-
-
-
-                stmt.close();
-                connection.close();
-
-//                runOnUiThread(() -> {
-//                    textResult.setText(resultBuilder.toString());
-//                    textResult.setTextColor(rgbColors[colorIndex]);
-//                    colorIndex = (colorIndex + 1) % rgbColors.length;
-//                });
-
-            } catch (Exception e) {
-                e.printStackTrace();
-//                runOnUiThread(() -> {
-//                    textResult.setText("Error:\n" + e.getMessage());
-//                    textResult.setTextColor(Color.RED);
-//                });
-            }
-        }).start();
-    }
-
-    // 添加设置按钮
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
