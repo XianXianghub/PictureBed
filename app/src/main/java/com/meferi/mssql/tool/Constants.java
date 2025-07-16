@@ -1,9 +1,10 @@
-package com.meferi.mssql;
+package com.meferi.mssql.tool;
 
 public class Constants {
 
 
 
+    public static final long PRODUCT_WAIT_TIMEOUT = 10 * 1000;
 
 
     public static final String PREF_NAME = "config_pref";
@@ -35,8 +36,11 @@ public class Constants {
     public static final String DEFAULT_UNIT_PRICE = "price_unit";
     public static final String DEFAULT_BARCODE = "barcode";
 
+    public static final String KEY_HOMEPAGE_WALLPAPER_URL = "homepage_wallpaper_url";
+    public static final String KEY_PRODUCT_WALLPAPER_URL = "product_wallpaper_url";
 
-
+    public static final String KEY_DEBUG_MODE = "debug_mode";
+    public static final String KEY_USE_MEFERI_SKU = "use_meferi_sku";
 
 
 

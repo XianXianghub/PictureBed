@@ -1,6 +1,6 @@
 
 
-package com.meferi.mssql;
+package com.meferi.mssql.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +11,10 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SettingsActivity extends AppCompatActivity {
+import com.meferi.mssql.tool.Constants;
+import com.meferi.mssql.R;
+
+public class TmpSettingsActivity extends AppCompatActivity {
 
     private EditText editApiAddress, editUsername, editPassword, editDatabaseName, editPort, editTableName;
     private EditText editProductName, editProductPrice, editProductImage, editUnitPrice, editBarcode;

@@ -6,4 +6,8 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
 
+    <string name="product_default_url">https://img2.huashi6.com/images/resource/thumbnail/2023/07/23/193722_24254930385.jpg?imageMogr2/quality/100/interlace/1/thumbnail/2000x%3E</string>
+
+    <string name="homepage_default_url">https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimage109.360doc.com%2FDownloadImg%2F2025%2F04%2F0321%2F296122601_4_20250403090445718&amp;refer=http%3A%2F%2Fimage109.360doc.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1755226070&amp;t=64c1506332989eb79a43df7e317d0c07</string>
+
 </resources>

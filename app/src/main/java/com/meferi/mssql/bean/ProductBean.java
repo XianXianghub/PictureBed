@@ -1,4 +1,4 @@
-package com.meferi.mssql;
+package com.meferi.mssql.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;

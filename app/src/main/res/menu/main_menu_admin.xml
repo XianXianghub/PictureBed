@@ -15,6 +15,10 @@
         android:title="壁纸设置" />
 
     <item
+        android:id="@+id/menu_advance"
+        android:title="高级设置" />
+
+    <item
         android:id="@+id/menu_about"
         android:title="关于" />
 

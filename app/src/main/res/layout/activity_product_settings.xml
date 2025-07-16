@@ -1,11 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-    Server & Product configuration page for tablet (mdpi 240dpi).
-    Top bar: logo (51dp height) + gray divider
-    Main area: ScrollView with all form fields and action buttons
--->
+<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -38,9 +33,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ll_logo" />
 
-    <!-- ========== Main scrollable form area ========== -->
+    <!-- ========== Main content scroll ========== -->
     <ScrollView
-        android:id="@+id/sv_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -54,153 +48,7 @@
             android:orientation="vertical"
             android:padding="24dp">
 
-            <!-- ===== Section: Server configuration ===== -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/server_config_title"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <!-- API Address -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_item_spacing"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="Server Address:" />
-
-                <EditText
-                    android:id="@+id/editApiAddress"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:hint="*Server Address"
-                    android:inputType="textUri" />
-            </LinearLayout>
-
-            <!-- Server Name -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_edit_spacing"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="Port:" />
-
-                <EditText
-                    android:id="@+id/editPort"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:hint="*Port"
-                    android:inputType="textPersonName" />
-            </LinearLayout>
-
-            <!-- Username -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_edit_spacing"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="Username:" />
-
-                <EditText
-                    android:id="@+id/editUsername"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:hint="Username"
-                    android:inputType="textEmailAddress" />
-            </LinearLayout>
-
-            <!-- Password -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_edit_spacing"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="Password:" />
-
-                <EditText
-                    android:id="@+id/editPassword"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:hint="Password" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_edit_spacing"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="Database Name:" />
-
-                <EditText
-                    android:id="@+id/editDatabaseName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:hint="Database Name" />
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_edit_spacing"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
-                    android:text="Table Name:" />
-
-                <EditText
-                    android:id="@+id/editTableName"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="7"
-                    android:hint="Table Name" />
-            </LinearLayout>
-
-            <!-- ===== Divider between two sections ===== -->
-            <View
-                android:id="@+id/divider_view"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                android:background="#CCCCCC" />
-
-
+            <!-- Product Section Title -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -221,17 +69,18 @@
                     android:text="@string/product_param_config_subtip"
                     android:textSize="12sp" />
             </LinearLayout>
-            <!-- barcode  -->
+
+            <!-- Barcode -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_item_spacing"
+                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:layout_weight="3"
                     android:text="Barcode:" />
 
                 <EditText
@@ -247,13 +96,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_item_spacing"
+                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:layout_weight="3"
                     android:text="Product Name:" />
 
                 <EditText
@@ -269,13 +118,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:layout_weight="3"
                     android:text="Product Price:" />
 
                 <EditText
@@ -291,13 +140,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:layout_weight="3"
                     android:text="Product Image:" />
 
                 <EditText
@@ -313,13 +162,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/setting_edit_spacing"
+                android:layout_marginTop="12dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="@dimen/setting_item_title_width"
+                    android:layout_weight="3"
                     android:text="Unit Price:" />
 
                 <EditText
@@ -331,7 +180,7 @@
                     android:inputType="numberDecimal" />
             </LinearLayout>
 
-            <!-- ===== Action buttons ===== -->
+            <!-- Buttons -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -359,9 +208,6 @@
                     android:textAllCaps="false"
                     android:textColor="@android:color/white" />
             </LinearLayout>
-
-
         </LinearLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
