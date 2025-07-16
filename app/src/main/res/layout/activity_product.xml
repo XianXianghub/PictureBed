@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ll_product"
+    android:id="@+id/product_bg"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/icon_product_bg"
@@ -9,8 +9,10 @@
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/ll_product_info"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:orientation="vertical">
 
         <LinearLayout
@@ -34,6 +36,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tv_price_unit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="2dp"
@@ -90,18 +93,7 @@
                     android:textColor="#222222"
                     android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/tv_bar_code"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15px"
-                    android:background="@drawable/sku_box"
-                    android:gravity="center"
-                    android:paddingLeft="10px"
-                    android:paddingRight="10px"
-                    android:text=""
-                    android:textColor="#222222"
-                    android:textSize="14sp" />
+
             </LinearLayout>
 
             <TextView
@@ -121,36 +113,44 @@
                 android:textSize="10sp" />
 
             <LinearLayout
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-20px"
-                android:orientation="horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <ImageView
-                    android:layout_width="151px"
+                    android:id="@+id/barcode_image"
+                    android:layout_width="wrap_content"
                     android:layout_height="105px"
                     android:src="@drawable/icon_code_img" />
 
-                <ImageView
-                    android:layout_width="94px"
-                    android:layout_height="105px"
-                    android:src="@drawable/icon_code_image" />
+                <TextView
+                    android:id="@+id/tv_barcode_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:gravity="center"
+                    android:textColor="#000"
+                    android:textSize="14sp" />
             </LinearLayout>
 
+
             <TextView
-                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="36dp"
                 android:layout_marginTop="5px"
                 android:text="54654654645756"
                 android:textColor="@color/black"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/ll_right"
         android:layout_width="match_parent"
         android:layout_height="625px"
         android:background="@drawable/icon_img_bg"

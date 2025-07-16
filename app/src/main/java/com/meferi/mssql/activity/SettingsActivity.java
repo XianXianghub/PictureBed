@@ -68,6 +68,20 @@ public class SettingsActivity extends AppCompatActivity {
             configManager.putConfig(Constants.KEY_HOMEPAGE_WALLPAPER_URL, homepageUrl);
             configManager.putConfig(Constants.KEY_PRODUCT_WALLPAPER_URL, productUrl);
 
+            File downloadsDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+            File homepageFile = new File(downloadsDir, "wallpaper_home.jpg");
+            File productFile = new File(downloadsDir, "wallpaper_product.jpg");
+            Log.i("WallpaperCleanup", "homepageFile="+homepageFile.getAbsolutePath() +"  productFile="+productFile.getAbsolutePath());
+
+            // Delete wallpaper files if the URL is empty
+            if (homepageUrl.isEmpty() && homepageFile.exists()) {
+                homepageFile.delete();
+                Log.i("WallpaperCleanup", "Deleted homepage wallpaper file.");
+            }
+            if (productUrl.isEmpty() && productFile.exists()) {
+                productFile.delete();
+                Log.i("WallpaperCleanup", "Deleted product wallpaper file.");
+            }
             if (homepageUrl.isEmpty() && productUrl.isEmpty()) {
                 Toast.makeText(this, getString(R.string.url_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 return;

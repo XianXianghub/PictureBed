@@ -132,8 +132,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:hint="12.99"
-                    android:inputType="numberDecimal" />
+                    android:hint="price"/>
             </LinearLayout>
 
             <!-- Product Image -->
@@ -176,8 +175,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="7"
-                    android:hint="2.50"
-                    android:inputType="numberDecimal" />
+                    android:hint="unit" />
             </LinearLayout>
 
             <!-- Buttons -->

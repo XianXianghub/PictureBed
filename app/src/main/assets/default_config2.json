@@ -1,0 +1,63 @@
+{
+  "version": "1.0",
+  "api_address": {
+    "id": 0,
+    "value": "192.168.101.80"
+  },
+  "username": {
+    "id": 1,
+    "value": "sa"
+  },
+  "password": {
+    "id": 2,
+    "value": "PXcLiNZ@Vu&6"
+  },
+  "database_name": {
+    "id": 3,
+    "value": "master"
+  },
+  "table_name": {
+    "id": 4,
+    "value": "goods"
+  },
+  "port": {
+    "id": 5,
+    "value": "1433"
+  },
+  "product_name": {
+    "id": 6,
+    "value": "name"
+  },
+  "product_price": {
+    "id": 7,
+    "value": "price"
+  },
+  "product_image": {
+    "id": 8,
+    "value": "img"
+  },
+  "unit_price": {
+    "id": 9,
+    "value": "price_unit"
+  },
+  "barcode": {
+    "id": 10,
+    "value": "barcode"
+  },
+  "homepage_wallpaper_url": {
+    "id": 11,
+    "value": ""
+  },
+  "product_wallpaper_url": {
+    "id": 12,
+    "value": ""
+  },
+  "debug_mode": {
+    "id": 13,
+    "value": "false"
+  },
+  "use_meferi_sku": {
+    "id": 14,
+    "value": "false"
+  }
+}

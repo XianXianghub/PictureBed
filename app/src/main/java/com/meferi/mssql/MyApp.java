@@ -7,13 +7,13 @@ import com.meferi.mssql.db.AppDatabase;
 import com.meferi.mssql.db.ConfigDao;
 import com.meferi.mssql.db.ConfigEntity;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class MyApp extends Application {
@@ -24,6 +24,9 @@ public class MyApp extends Application {
         return instance;
     }
 
+    // Global config version
+    public static String configVersion = "1.0";
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -32,27 +35,25 @@ public class MyApp extends Application {
         new Thread(() -> {
             try {
                 ConfigDao configDao = AppDatabase.getInstance(this).configDao();
+                List<ConfigEntity> existingConfigs = configDao.getAll();
 
-                // 只在数据库为空时初始化
-                if (configDao.getAll().isEmpty()) {
-                    List<ConfigEntity> defaultConfigs = loadDefaultConfigFromJson();
-                    Log.d(TAG, "defaultConfigs="+defaultConfigs);
+                // Always read version from JSON
+                List<ConfigEntity> defaultConfigs = loadDefaultConfigFromJson();
 
+                if (existingConfigs.isEmpty()) {
+                    Log.d(TAG, "No existing config, initializing from JSON.");
                     configDao.insertAll(defaultConfigs);
-                    Log.d(TAG, "du，configDao.getAll()="+configDao.getAll());
-
-                    Log.d(TAG, "默认配置写入数据库");
+                    Log.d(TAG, "Inserted default configs into database.");
                 } else {
-                    List<ConfigEntity> list = configDao.getAll();
-                    for (ConfigEntity entity : list){
-                        Log.d(TAG, "entity="+entity);
+                    Log.d(TAG, "Existing config found, skipping initialization.");
+                    for (ConfigEntity entity : existingConfigs) {
+                        Log.d(TAG, "Existing config: " + entity);
                     }
-                    Log.d(TAG, "已存在配置数据，configDao.getAll()="+configDao.getAll());
-
-                    Log.d(TAG, "已存在配置数据，跳过初始化");
                 }
+
+                Log.d(TAG, "Current config version: " + configVersion);
             } catch (Exception e) {
-                Log.e(TAG, "初始化 Room 配置失败", e);
+                Log.e(TAG, "Failed to initialize Room config", e);
             }
         }).start();
     }
@@ -60,26 +61,34 @@ public class MyApp extends Application {
     private List<ConfigEntity> loadDefaultConfigFromJson() {
         List<ConfigEntity> list = new ArrayList<>();
 
-        try {
-            InputStream is = getAssets().open("default_config.json");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        try (InputStream is = getAssets().open("default_config2.json");
+             BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
+
             StringBuilder builder = new StringBuilder();
             String line;
-            while ((line = reader.readLine()) != null) builder.append(line);
-            reader.close();
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
 
-            JSONArray jsonArray = new JSONArray(builder.toString());
+            JSONObject jsonObject = new JSONObject(builder.toString());
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject obj = jsonArray.getJSONObject(i);
-                int id = obj.getInt("id");
-                String key = obj.getString("key");
-                String value = obj.getString("value");
+            // Update global version
+            configVersion = jsonObject.optString("version", "1.0");
+
+            Iterator<String> keys = jsonObject.keys();
+            while (keys.hasNext()) {
+                String key = keys.next();
+                if ("version".equals(key)) continue;
+
+                JSONObject item = jsonObject.getJSONObject(key);
+                int id = item.getInt("id");
+                String value = item.getString("value");
+
                 list.add(new ConfigEntity(id, key, value));
             }
 
         } catch (Exception e) {
-            Log.e(TAG, "读取 JSON 配置失败", e);
+            Log.e(TAG, "Failed to load default_config.json", e);
         }
 
         return list;

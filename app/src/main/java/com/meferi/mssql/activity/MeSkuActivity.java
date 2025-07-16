@@ -135,7 +135,7 @@ public class MeSkuActivity extends AppCompatActivity {
         tvPrice = findViewById(R.id.tv_price);
         tvProductName = findViewById(R.id.tv_product_name);
         tvWeight = findViewById(R.id.tv_weight);
-        tvBarCode = findViewById(R.id.tv_bar_code);
+        tvBarCode = findViewById(R.id.tv_barcode_number);
         tvInfo = findViewById(R.id.tv_info);
         image = findViewById(R.id.image);
     }
@@ -255,10 +255,13 @@ public class MeSkuActivity extends AppCompatActivity {
         }
     }
     private void applyWallpaperBackground() {
-        File wallpaperFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "wallpaper_product.jpg");
-        Log.d(TAG, "wallpaper_product: " + wallpaperFile.getAbsolutePath());
+
+        File downloadsDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+        File wallpaperFile = new File(downloadsDir, "wallpaper_product.jpg");
+        Log.d(TAG, "wallpaperFile: " + wallpaperFile.getAbsolutePath());
+
         if (wallpaperFile.exists()) {
-            LinearLayout llProduct = findViewById(R.id.ll_product);
+            LinearLayout llProduct = findViewById(R.id.product_bg);
             Bitmap bitmap = BitmapFactory.decodeFile(wallpaperFile.getAbsolutePath());
 
             if (bitmap != null) {
@@ -266,7 +269,6 @@ public class MeSkuActivity extends AppCompatActivity {
                 llProduct.setBackground(drawable);
             }
         }
-
     }
     public String convertAndFormat(String input) {
         try {

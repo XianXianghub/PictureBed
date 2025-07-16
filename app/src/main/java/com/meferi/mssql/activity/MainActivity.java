@@ -42,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private String ACTION_SEND_RESULT = "android.intent.action.MEF_ACTION";
     private String EXTRA_SCAN_BARCODE = "android.intent.action.MEF_DATA1";
+    private String EXTRA_BARCODE_TYPE = "type";
+
     private int pendingDownloads = 0;
 
     // Wallpaper related variables
@@ -55,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
             ConfigManager configManager = new ConfigManager(MainActivity.this);
 
             String val = intent.getStringExtra(EXTRA_SCAN_BARCODE);
+            String type = intent.getStringExtra(EXTRA_BARCODE_TYPE);
+            Log.i(TAG, "val="+val);
+            Log.i(TAG, "type="+type);
+
             if(val != null && val.equals("*#*#7895123#*#*")){
                 Intent pintent = new Intent(MainActivity.this, MenuActivity.class);
                 startActivity(pintent);
@@ -73,6 +79,20 @@ public class MainActivity extends AppCompatActivity {
 
                             String homepageUrl = configManager.getConfig(Constants.KEY_HOMEPAGE_WALLPAPER_URL, "");
                             String productUrl = configManager.getConfig(Constants.KEY_PRODUCT_WALLPAPER_URL, "");
+
+
+                            File downloadsDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+                            File homepageFile = new File(downloadsDir, "wallpaper_home.jpg");
+                            File productFile = new File(downloadsDir, "wallpaper_product.jpg");
+
+                            if (homepageUrl.isEmpty() && homepageFile.exists()) {
+                                homepageFile.delete();
+                                Log.i(TAG, "Deleted homepage wallpaper file.");
+                            }
+                            if (productUrl.isEmpty() && productFile.exists()) {
+                                productFile.delete();
+                                Log.i(TAG, "Deleted product wallpaper file.");
+                            }
 
                             if (!homepageUrl.isEmpty() || !productUrl.isEmpty()) {
                                 downloadWallpapers(homepageUrl, productUrl);
@@ -98,9 +118,13 @@ public class MainActivity extends AppCompatActivity {
                 if(sku){
                     pintent = new Intent(MainActivity.this, MeSkuActivity.class);
                     pintent.putExtra("product_key", mProductBean);
+                    pintent.putExtra("type", type);
+
                 }else {
                     pintent = new Intent(MainActivity.this, ProductActivity.class);
                     pintent.putExtra("product_key", mProductBean);
+                    pintent.putExtra("type", type);
+
                 }
                 startActivity(pintent);
             } else {
@@ -276,12 +300,13 @@ public class MainActivity extends AppCompatActivity {
         try {
             ACTION_SEND_RESULT = mScannerManager.getParameterString(ParameterID.BROADCAST_ACTION);
             EXTRA_SCAN_BARCODE = mScannerManager.getParameterString(ParameterID.BROADCAST_DATA);
+            EXTRA_BARCODE_TYPE = mScannerManager.getParameterString(ParameterID.BROADCAST_TYPE);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
-
         registerReceiver(mResultReceiver, new IntentFilter(ACTION_SEND_RESULT), Context.RECEIVER_EXPORTED);
-        findViewById(R.id.btn_settings).setVisibility(View.VISIBLE);
+
+        findViewById(R.id.btn_settings).setVisibility(View.GONE);
     }
 
     private void hideSystemUI() {

@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,10 +22,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.google.zxing.BarcodeFormat;
 import com.meferi.mssql.R;
 import com.meferi.mssql.bean.ProductBean;
 import com.meferi.mssql.db.ConfigManager;
 import com.meferi.mssql.tool.Constants;
+import com.meferi.mssql.tool.CurrencySymbolUtil;
+import com.meferi.mssql.tool.QRCodeUtil;
 
 import java.io.File;
 import java.sql.Connection;
@@ -40,14 +44,15 @@ public class ProductActivity extends AppCompatActivity {
 
     private ProductBean productBean;
 
-    private TextView tvPrice, tvProductName, tvWeight, tvBarCode, tvInfo;
-    private ImageView image;
+    private TextView tvPrice, tvProductName, tvWeight, tvBarCode, tvInfo, tvPrice_unit;
+    private ImageView image, barcodeimageView;
 
     // 配置字段名（从数据库中读取的字段名）
     private String Productbarcode, ProductName, ProductPrice, ProductImage, UnitPrice;
     private String ip, user, password, database, table, port;
 
     private boolean isExistData = false;
+    private String barcodetype = "";
 
     private final Handler mHandler = new Handler(msg -> {
         if (msg.what == MSG_DELAY_CLOSE) {
@@ -72,6 +77,18 @@ public class ProductActivity extends AppCompatActivity {
             }
         }
     };
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+        );
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +101,7 @@ public class ProductActivity extends AppCompatActivity {
         hideSystemUI();
 
         productBean = getIntent().getParcelableExtra("product_key");
+        barcodetype = getIntent().getStringExtra("type");
         if (productBean == null) {
             Toast.makeText(this, "Invalid product data", Toast.LENGTH_SHORT).show();
             finish();
@@ -91,6 +109,26 @@ public class ProductActivity extends AppCompatActivity {
         }
 
         initViews();
+        barcodeimageView = findViewById(R.id.barcode_image) ;
+
+
+        String barcodeContent = productBean.getBarcode();
+        int width = 600;
+        int height = 200;
+        tvBarCode.setText(barcodeContent);
+        Log.d(TAG, "type==="+barcodetype);
+        BarcodeFormat format = BarcodeFormat.CODE_39;
+        if(barcodetype != null){
+            if( barcodetype.equalsIgnoreCase("EAN13")) {
+                format = BarcodeFormat.EAN_13;
+            }
+        }
+        Bitmap bitmap = QRCodeUtil.createBarcodeBitmap(barcodeContent, width, height, format);
+        if (bitmap != null) {
+            barcodeimageView.setImageBitmap(bitmap);
+        }
+
+
 
         // 注册扫码结果广播接收器
         IntentFilter mFilter = new IntentFilter("com.meferi.action.CMD.QUICKSCAN.RESULT");
@@ -100,17 +138,6 @@ public class ProductActivity extends AppCompatActivity {
         mHandler.sendEmptyMessageDelayed(MSG_DELAY_CLOSE, Constants.PRODUCT_WAIT_TIMEOUT);
     }
 
-    private void hideSystemUI() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-        );
-    }
 
     @Override
     protected void onResume() {
@@ -146,11 +173,13 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     private void applyWallpaperBackground() {
-        File wallpaperFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "wallpaper_product.jpg");
+
+        File downloadsDir = getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS);
+        File wallpaperFile = new File(downloadsDir, "wallpaper_product.jpg");
         Log.d(TAG, "wallpaperFile: " + wallpaperFile.getAbsolutePath());
 
         if (wallpaperFile.exists()) {
-            LinearLayout llProduct = findViewById(R.id.ll_product);
+            LinearLayout llProduct = findViewById(R.id.product_bg);
             Bitmap bitmap = BitmapFactory.decodeFile(wallpaperFile.getAbsolutePath());
 
             if (bitmap != null) {
@@ -212,6 +241,24 @@ public class ProductActivity extends AppCompatActivity {
                     if (!isExistData) {
                         Toast.makeText(this, "未找到该商品信息", Toast.LENGTH_SHORT).show();
                     } else {
+                        boolean showImage = productBean.getImg() != null && !productBean.getImg().isEmpty();
+                        LinearLayout llImg = findViewById(R.id.ll_right);
+                        LinearLayout llProductInfo = findViewById(R.id.ll_product_info);
+                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llProductInfo.getLayoutParams();
+                        if (showImage) {
+                            llImg.setVisibility(View.VISIBLE);
+
+                            // 恢复默认：不占满宽度
+                            params.width = LinearLayout.LayoutParams.WRAP_CONTENT;
+                            params.weight = 0;
+                            llProductInfo.setGravity(Gravity.NO_GRAVITY);
+                        } else {
+                            llImg.setVisibility(View.GONE);
+                            params.width = 0;
+                            params.weight = 1;
+                            llProductInfo.setGravity(Gravity.CENTER_HORIZONTAL);
+                        }
+                        llProductInfo.setLayoutParams(params);
                         showProduct();
                     }
                 });
@@ -234,9 +281,10 @@ public class ProductActivity extends AppCompatActivity {
 
     private void initViews() {
         tvPrice = findViewById(R.id.tv_price);
+        tvPrice_unit = findViewById(R.id.tv_price_unit);
         tvProductName = findViewById(R.id.tv_product_name);
         tvWeight = findViewById(R.id.tv_weight);
-        tvBarCode = findViewById(R.id.tv_bar_code);
+        tvBarCode = findViewById(R.id.tv_barcode_number);
         tvInfo = findViewById(R.id.tv_info);
         image = findViewById(R.id.image);
     }
@@ -244,16 +292,20 @@ public class ProductActivity extends AppCompatActivity {
     private void showProduct() {
         tvPrice.setText(productBean.getPrice());
         tvProductName.setText(productBean.getName());
-        tvWeight.setText(productBean.getPriceunt());
+        tvWeight.setText(productBean.getPriceUnit());
         tvBarCode.setText(productBean.getBarcode());
         tvInfo.setText(productBean.getDbinfo());
+        String symbol = CurrencySymbolUtil.getSymbol(productBean.getPriceUnit());
+        tvPrice_unit.setText(symbol);
 
-        Glide.with(this)
-                .load(productBean.getImg())
-                .override(480, 480)
-                .placeholder(R.drawable.loading)
-                .centerCrop()
-                .into(image);
+        if(productBean.getImg() != null && !productBean.getImg().isEmpty()) {
+            Glide.with(this)
+                    .load(productBean.getImg())
+                    .override(480, 480)
+                    .placeholder(R.drawable.loading)
+                    .centerCrop()
+                    .into(image);
+        }
     }
 
     @Override

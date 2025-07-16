@@ -1,6 +1,5 @@
 package com.meferi.mssql.activity;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,8 +7,9 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.meferi.mssql.tool.Constants;
 import com.meferi.mssql.R;
+import com.meferi.mssql.db.ConfigManager;
+import com.meferi.mssql.tool.Constants;
 
 public class DbSettingsActivity extends AppCompatActivity {
 
@@ -26,6 +26,7 @@ public class DbSettingsActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
         );
     }
+    private  ConfigManager configManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,22 +44,20 @@ public class DbSettingsActivity extends AppCompatActivity {
         Button btnCancel = findViewById(R.id.btn_cancel);
 
 
+        configManager = new ConfigManager(this);
 
-        SharedPreferences prefs = getSharedPreferences(Constants.PREF_NAME, MODE_PRIVATE);
-        editProductName.setText(prefs.getString(Constants.KEY_PRODUCT_NAME, ""));
-        editProductPrice.setText(prefs.getString(Constants.KEY_PRODUCT_PRICE, ""));
-        editProductImage.setText(prefs.getString(Constants.KEY_PRODUCT_IMAGE, ""));
-        editUnitPrice.setText(prefs.getString(Constants.KEY_UNIT_PRICE, ""));
-        editBarcode.setText(prefs.getString(Constants.KEY_BARCODE, ""));
+        editProductName.setText(configManager.getConfig(Constants.KEY_PRODUCT_NAME, ""));
+        editProductPrice.setText(configManager.getConfig(Constants.KEY_PRODUCT_PRICE, ""));
+        editProductImage.setText(configManager.getConfig(Constants.KEY_PRODUCT_IMAGE, ""));
+        editUnitPrice.setText(configManager.getConfig(Constants.KEY_UNIT_PRICE, ""));
+        editBarcode.setText(configManager.getConfig(Constants.KEY_BARCODE, ""));
 
         btnSave.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putString(Constants.KEY_PRODUCT_NAME, editProductName.getText().toString().trim());
-            editor.putString(Constants.KEY_PRODUCT_PRICE, editProductPrice.getText().toString().trim());
-            editor.putString(Constants.KEY_PRODUCT_IMAGE, editProductImage.getText().toString().trim());
-            editor.putString(Constants.KEY_UNIT_PRICE, editUnitPrice.getText().toString().trim());
-            editor.putString(Constants.KEY_BARCODE, editBarcode.getText().toString().trim());
-            editor.apply();
+            configManager.putConfig(Constants.KEY_PRODUCT_NAME, editProductName.getText().toString().trim());
+            configManager.putConfig(Constants.KEY_PRODUCT_PRICE, editProductPrice.getText().toString().trim());
+            configManager.putConfig(Constants.KEY_PRODUCT_IMAGE, editProductImage.getText().toString().trim());
+            configManager.putConfig(Constants.KEY_UNIT_PRICE, editUnitPrice.getText().toString().trim());
+            configManager.putConfig(Constants.KEY_BARCODE, editBarcode.getText().toString().trim());
             finish();
         });
 

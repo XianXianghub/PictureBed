@@ -88,7 +88,7 @@ public class ProductBean implements Parcelable {
         this.price = price;
     }
 
-    public String getPriceunt() {
+    public String getPriceUnit() {
         return priceunt;
     }
 

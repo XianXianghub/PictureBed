@@ -21,8 +21,32 @@
 -libraryjars libs/sdkapi.jar
 
 
--keep class com.meferi.mssql.bean.** { *; }
+#-keep class com.meferi.mssql.db.** { *; }
+
+-keepattributes *Annotation*
+
+# 保留所有继承 RoomDatabase 的类及构造函数
+-keep class * extends androidx.room.RoomDatabase {
+    <init>(...);
+}
+
+
+# 保留 Room 相关的类（Database、Dao、Entity）
 -keep class com.meferi.mssql.db.** { *; }
+
+
+
+
+# 保留实现了 Parcelable 接口的类的 CREATOR 字段
+-keepclassmembers class * implements android.os.Parcelable {
+    public static final android.os.Parcelable$Creator *;
+}
+# 保留所有字段名和类名  JSON 序列化
+-keep class com.meferi.mssql.bean.ProductBean {
+    <fields>;
+    <methods>;
+}
+
 -keep class com.bumptech.** { *; }
 
 -keep class com.google.zxing.** { *; }

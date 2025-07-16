@@ -5,10 +5,12 @@ import android.content.SharedPreferences;
 import android.util.Base64;
 import android.util.Log;
 
+import com.meferi.mssql.MyApp;
 import com.meferi.mssql.db.ConfigEntity;
 import com.meferi.mssql.db.ConfigManager;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Comparator;
 import java.util.List;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -158,32 +160,76 @@ public final class Utils {
                 && configString.length() > CONFIG_PREFIX.length() + CONFIG_SUBFIX.length();
     }
     public static boolean importConfig(Context context, String configString) {
-        ConfigManager configManager = new ConfigManager(context); // 如果在 Activity 中
+        ConfigManager configManager = new ConfigManager(context);
+        Log.d(TAG, "Original configString: " + configString);
 
+        // Extract payload
         configString = extractConfigPayload(configString);
+
+        // Unzip config string
         try {
             configString = Utils.unzipString(configString);
         } catch (Exception e) {
-            e.printStackTrace();
-            Log.d(TAG, "unzipString exception");
-            return false    ;
+            Log.e(TAG, "Failed to unzip config string", e);
+            return false;
         }
-        List<ConfigEntity> configs = configManager.getAllConfigs();
 
-        if (configs == null || configs.isEmpty()) return false;
+        Log.d(TAG, "Unzipped configString: " + configString);
 
-        String[] values = configString.split("\u001c"); // 分隔符为 ASCII 0x1C
-        // 按id排序（假设数据库已经按id顺序，否则这里再排序）
-        configs.sort((a, b) -> Integer.compare(a.id, b.id));
-        if(values != null && values.length <= configs.size()) {
-            for (int i = 0; i < configs.size(); i++) {
-                configManager.putConfig(configs.get(i).key, values[i]);
-                Log.d(TAG, "putConfig: " + configs.get(i).key + " " + values[i] );
+        // Check prefix
+        if (!configString.startsWith("mssql")) {
+            Log.w(TAG, "Invalid config format: does not start with 'mssql'");
+            return false;
+        }
+
+        // Extract version
+        String version = "0.0";
+        if (configString.contains("\u001c")) {
+            String[] array = configString.split("\u001c");
+            if (array.length > 2) {
+                version = array[1];
+                Log.d(TAG, "Parsed config version: " + version);
             }
         }
-        Log.d(TAG, "unzipString: " + configString);
+
+        // Compare with current version
+        if (!version.equals(MyApp.configVersion)) {
+            Log.w(TAG, "Version mismatch: file=" + version + ", current=" + MyApp.configVersion);
+            // You may return false here if strict version match is required
+        }
+
+        // Remove prefix: mssql + version + delimiter
+        configString = configString.replaceFirst("mssql\u001c" + version + "\u001c", "");
+        Log.d(TAG, "Final config payload: ===" + configString + "===");
+
+        // Load current config keys
+        List<ConfigEntity> configs = configManager.getAllConfigs();
+        if (configs == null || configs.isEmpty()) {
+            Log.w(TAG, "No existing configs found in database");
+            return false;
+        }
+
+        // Split incoming values
+        String[] values = configString.split("\u001c");
+        if (values.length > configs.size()) {
+            Log.e(TAG, "Too many config values; expected max " + configs.size() + ", got " + values.length);
+            return false;
+        }
+
+        // Sort configs by ID
+        configs.sort(Comparator.comparingInt(c -> c.id));
+
+        // Update config entries
+        for (int i = 0; i < values.length; i++) {
+            String key = configs.get(i).key;
+            String value = values[i];
+            configManager.putConfig(key, value);
+            Log.d(TAG, "Set config: " + key + " = " + value);
+        }
+
         return true;
     }
+
     public static String extractConfigPayload(String configString) {
         // 截取中间内容
         return configString.substring(CONFIG_PREFIX.length(), configString.length() - CONFIG_SUBFIX.length());
