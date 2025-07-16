@@ -44,10 +44,19 @@ public class SettingsActivity extends AppCompatActivity {
         Switch switchDebug = findViewById(R.id.switch_debug);
         Switch switchSku = findViewById(R.id.switch_sku);
         Button btnSave = findViewById(R.id.btn_save);
+        Button btnCancel = findViewById(R.id.btn_cancel);
+        btnCancel.setOnClickListener(v -> finish());
 
         configManager = new ConfigManager(this);
         switchDebug.setChecked(Boolean.parseBoolean(configManager.getConfig(Constants.KEY_DEBUG_MODE, "false")));
         switchSku.setChecked(Boolean.parseBoolean(configManager.getConfig(Constants.KEY_USE_MEFERI_SKU, "true")));
+        switchDebug.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            configManager.putConfig(Constants.KEY_DEBUG_MODE, Boolean.toString(isChecked));
+        });
+
+        switchSku.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            configManager.putConfig(Constants.KEY_USE_MEFERI_SKU, Boolean.toString(isChecked));
+        });
 
         homepageAddress.setText(configManager.getConfig(Constants.KEY_HOMEPAGE_WALLPAPER_URL, ""));
         productAddress.setText(configManager.getConfig(Constants.KEY_PRODUCT_WALLPAPER_URL, ""));
@@ -60,7 +69,7 @@ public class SettingsActivity extends AppCompatActivity {
             configManager.putConfig(Constants.KEY_PRODUCT_WALLPAPER_URL, productUrl);
 
             if (homepageUrl.isEmpty() && productUrl.isEmpty()) {
-                Toast.makeText(this, "URL 不能为空", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.url_cannot_be_empty), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -69,18 +78,18 @@ public class SettingsActivity extends AppCompatActivity {
             if (!productUrl.isEmpty()) pendingDownloads++;
 
             ProgressDialog progressDialog = new ProgressDialog(this);
-            progressDialog.setTitle("下载中");
-            progressDialog.setMessage("正在下载壁纸...");
+            progressDialog.setTitle(getString(R.string.downloading));
+            progressDialog.setMessage(getString(R.string.downloading_wallpapers));
             progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
             progressDialog.setCancelable(false);
             progressDialog.show();
 
             if (!homepageUrl.isEmpty()) {
-                downloadWallpaper(homepageUrl, "wallpaper_home.jpg", "主页壁纸", progressDialog);
+                downloadWallpaper(homepageUrl, "wallpaper_home.jpg", getString(R.string.homepage_wallpaper), progressDialog);
             }
 
             if (!productUrl.isEmpty()) {
-                downloadWallpaper(productUrl, "wallpaper_product.jpg", "产品壁纸", progressDialog);
+                downloadWallpaper(productUrl, "wallpaper_product.jpg", getString(R.string.product_wallpaper), progressDialog);
             }
         });
 
@@ -93,7 +102,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (pendingDownloads <= 0) {
             progressDialog.dismiss();
 
-            String msg = success ? "所有壁纸下载完成" : "部分壁纸下载失败，请检查网络";
+            String msg = success ? getString(R.string.all_wallpapers_downloaded) : getString(R.string.some_wallpapers_failed);
             Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
         }
     }
@@ -111,7 +120,7 @@ public class SettingsActivity extends AppCompatActivity {
                 connection.connect();
 
                 if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-                    throw new Exception("HTTP 错误码: " + connection.getResponseCode());
+                    throw new Exception(getString(R.string.http_error_code) + connection.getResponseCode());
                 }
 
                 int contentLength = connection.getContentLength();
@@ -147,16 +156,15 @@ public class SettingsActivity extends AppCompatActivity {
                 success = renamed;
 
             } catch (Exception e) {
-                Log.e("WallpaperDownload", label + " 下载失败", e);
+                Log.e("WallpaperDownload", label + " " + getString(R.string.download_failed), e);
             } finally {
                 try {
                     if (input != null) input.close();
                     if (output != null) output.close();
                     if (connection != null) connection.disconnect();
                 } catch (Exception e) {
-                    Log.e("WallpaperDownload", "关闭流异常", e);
+                    Log.e("WallpaperDownload", getString(R.string.close_stream_error), e);
                 }
-                // 通知下载结束
                 boolean finalSuccess = success;
                 runOnUiThread(() -> onDownloadFinished(label, finalSuccess, progressDialog));
             }

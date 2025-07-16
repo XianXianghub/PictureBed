@@ -18,7 +18,7 @@
         android:id="@+id/save_qr"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="保存二维码"
+        android:text="@string/save_qr_code"
         android:textColor="@android:color/white"
         android:background="@drawable/button_save_bg"
         android:textAllCaps="false"/>

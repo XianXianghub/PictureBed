@@ -6,8 +6,45 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
 
-    <string name="product_default_url">https://img2.huashi6.com/images/resource/thumbnail/2023/07/23/193722_24254930385.jpg?imageMogr2/quality/100/interlace/1/thumbnail/2000x%3E</string>
+    <string name="menu_server_config">Server Configuration</string>
+    <string name="menu_product_param_config">Product Parameter Configuration</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_export_settings">Export Settings</string>
 
-    <string name="homepage_default_url">https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimage109.360doc.com%2FDownloadImg%2F2025%2F04%2F0321%2F296122601_4_20250403090445718&amp;refer=http%3A%2F%2Fimage109.360doc.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1755226070&amp;t=64c1506332989eb79a43df7e317d0c07</string>
+    <string name="generating_qr_code">Generating QR Code...</string>
+    <string name="qr_code_generation_failed">Failed to generate QR Code</string>
 
+    <string name="function_menu_title">Function Menu</string>
+    <string name="url_cannot_be_empty">URL cannot be empty</string>
+    <string name="downloading">Downloading</string>
+    <string name="downloading_wallpapers">Downloading wallpapers...</string>
+    <string name="homepage_wallpaper">Homepage Wallpaper</string>
+    <string name="product_wallpaper">Product Wallpaper</string>
+    <string name="all_wallpapers_downloaded">All wallpapers downloaded</string>
+    <string name="some_wallpapers_failed">Some wallpapers failed to download, please check your network</string>
+    <string name="http_error_code">HTTP error code: </string>
+    <string name="download_failed">Download failed</string>
+    <string name="close_stream_error">Error closing stream</string>
+
+    <string name="wallpaper_configuration">Wallpaper configuration</string>
+    <string name="home_page">Home page:</string>
+    <string name="product_page">Product page:</string>
+    <string name="url_hint">*url</string>
+    <string name="save_and_download">Save and Download</string>
+    <string name="enable_debug_mode">Enable Debug Mode</string>
+    <string name="meferi_sku">Meferi SKU</string>
+
+    <string name="save_qr_code">Save QR Code</string>
+    <string name="qr_code_saved_to">QR Code saved to:\n%1$s</string>
+    <string name="save_failed">Save failed</string>
+
+    <string name="config_importing">Importing configuration...</string>
+    <string name="config_import_success">Configuration imported successfully</string>
+    <string name="config_import_failed">Configuration import failed</string>
+    <string name="download_progress">Downloading</string>
+    <string name="wallpaper_download_complete">Wallpaper download completed</string>
+    <string name="download_partial_failure">Some downloads failed</string>
+    <string name="home_wallpaper">Home wallpaper</string>
+    <string name="product_default_url" translatable="false">test</string>
+    <string name="homepage_default_url" translatable="false">test</string>
 </resources>

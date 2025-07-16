@@ -1,0 +1,52 @@
+<resources>
+    <string name="app_name">mssql</string>
+    <string name="server_config_title">服务器配置</string>
+    <string name="product_param_config_title">产品参数配置</string>
+    <string name="product_param_config_subtip">请输入对应产品信息字段的ID。</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+
+
+
+    <string name="menu_server_config">服务器配置</string>
+    <string name="menu_product_param_config">产品参数配置</string>
+    <string name="menu_settings">设置</string>
+    <string name="menu_export_settings">导出设置</string>
+
+    <string name="generating_qr_code">正在生成二维码...</string>
+    <string name="qr_code_generation_failed">二维码生成失败</string>
+    <string name="function_menu_title">功能菜单</string>
+    <string name="url_cannot_be_empty">URL 不能为空</string>
+    <string name="downloading">下载中</string>
+    <string name="downloading_wallpapers">正在下载壁纸...</string>
+    <string name="homepage_wallpaper">主页壁纸</string>
+    <string name="product_wallpaper">产品壁纸</string>
+    <string name="all_wallpapers_downloaded">所有壁纸下载完成</string>
+    <string name="some_wallpapers_failed">部分壁纸下载失败，请检查网络</string>
+    <string name="http_error_code">HTTP 错误码: </string>
+    <string name="download_failed">下载失败</string>
+    <string name="close_stream_error">关闭流异常</string>
+
+    <string name="wallpaper_configuration">壁纸配置</string>
+    <string name="home_page">首页：</string>
+    <string name="product_page">产品页：</string>
+    <string name="url_hint">*url</string>
+    <string name="save_and_download">保存并下载</string>
+    <string name="enable_debug_mode">启用调试模式</string>
+    <string name="meferi_sku">Meferi SKU</string>
+
+    <string name="save_qr_code">保存二维码</string>
+
+    <string name="qr_code_saved_to">二维码已保存到:\n%1$s</string>
+    <string name="save_failed">保存失败</string>
+
+
+    <string name="config_importing">配置导入中...</string>
+    <string name="config_import_success">配置导入成功</string>
+    <string name="config_import_failed">配置导入失败</string>
+    <string name="download_progress">下载中</string>
+    <string name="wallpaper_download_complete">壁纸下载完成</string>
+    <string name="download_partial_failure">部分下载失败</string>
+    <string name="home_wallpaper">主页壁纸</string>
+
+</resources>

@@ -37,7 +37,6 @@
 
     <!-- 主内容滚动区域 -->
     <ScrollView
-        android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/logo_divider"
@@ -55,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Wallpaper configuration"
+                android:text="@string/wallpaper_configuration"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -69,7 +68,7 @@
                     android:id="@+id/tv_homepage"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:text="Home page:"
+                    android:text="@string/home_page"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -84,7 +83,7 @@
                     android:maxLines="4"
                     android:inputType="textUri|textMultiLine"
                     android:gravity="top|start"
-                    android:hint="*url"
+                    android:hint="@string/url_hint"
                     app:layout_constraintStart_toEndOf="@id/tv_homepage"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -100,7 +99,7 @@
                     android:id="@+id/tv_product"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:text="Product page:"
+                    android:text="@string/product_page"
                     android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -115,29 +114,13 @@
                     android:maxLines="4"
                     android:inputType="textUri|textMultiLine"
                     android:gravity="top|start"
-                    android:hint="*url"
+                    android:hint="@string/url_hint"
                     app:layout_constraintStart_toEndOf="@id/tv_product"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <!-- 保存按钮，放在编辑框下方，开关上方 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="20dp">
 
-                <Button
-                    android:id="@+id/btn_save"
-                    android:layout_width="160dp"
-                    android:layout_height="wrap_content"
-                    android:text="保存并下载"
-                    android:textAllCaps="false"
-                    android:background="@drawable/button_save_bg"
-                    android:textColor="@android:color/white" />
-            </LinearLayout>
 
             <!-- 分割线 -->
             <View
@@ -155,10 +138,9 @@
                     android:id="@+id/tv_debug"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:text="启用调试模式"
+                    android:text="@string/enable_debug_mode"
                     android:textSize="14sp"
                     android:gravity="center_vertical"
-                    app:layout_constraintStart_toStartOf="@id/tv_homepage"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintWidth_percent="0.5" />
@@ -183,7 +165,7 @@
                     android:id="@+id/tv_use_sku"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:text="Meferi SKU"
+                    android:text="@string/meferi_sku"
                     android:textSize="14sp"
                     android:gravity="center_vertical"
                     app:layout_constraintTop_toTopOf="parent"
@@ -199,6 +181,35 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!-- ===== Action buttons ===== -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_cancel_bg"
+                    android:text="@string/cancel"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/black" />
+
+                <Button
+                    android:id="@+id/btn_save"
+                    android:layout_width="120dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:background="@drawable/button_save_bg"
+                    android:text="@string/save"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

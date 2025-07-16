@@ -44,11 +44,10 @@ public class MainActivity extends AppCompatActivity {
     private String EXTRA_SCAN_BARCODE = "android.intent.action.MEF_DATA1";
     private int pendingDownloads = 0;
 
-    // 初始化壁纸相关变量
+    // Wallpaper related variables
     private String Productbarcode, ProductName, ProductPrice, ProductImage, UnitPrice;
     private String ip, user, password, database, table, port;
 
-    // 扫描广播接收器
     private final BroadcastReceiver mResultReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -57,11 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
             String val = intent.getStringExtra(EXTRA_SCAN_BARCODE);
             if(val != null && val.equals("*#*#7895123#*#*")){
-               Intent pintent = new Intent(MainActivity.this, MenuActivity.class);
-               startActivity(pintent);
-               return;
+                Intent pintent = new Intent(MainActivity.this, MenuActivity.class);
+                startActivity(pintent);
+                return;
             } else if (Utils.isValidConfig(val)) {
-                showProgressDialog("配置导入中...");
+                showProgressDialog(getString(R.string.config_importing));
 
                 new Thread(() -> {
                     boolean success = Utils.importConfig(MainActivity.this, val);
@@ -70,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         dismissProgressDialog();
 
                         if (success) {
-                            Toast.makeText(MainActivity.this, "配置导入成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.config_import_success, Toast.LENGTH_SHORT).show();
 
                             String homepageUrl = configManager.getConfig(Constants.KEY_HOMEPAGE_WALLPAPER_URL, "");
                             String productUrl = configManager.getConfig(Constants.KEY_PRODUCT_WALLPAPER_URL, "");
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            Toast.makeText(MainActivity.this, "配置导入失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, R.string.config_import_failed, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }).start();
@@ -88,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            // 普通条码流程
             ProductBean mProductBean = new ProductBean();
             mProductBean.setBarcode(val);
             boolean IsLogin = Utils.getBoolean("IsLogin", true);
@@ -100,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                 if(sku){
                     pintent = new Intent(MainActivity.this, MeSkuActivity.class);
                     pintent.putExtra("product_key", mProductBean);
-
                 }else {
                     pintent = new Intent(MainActivity.this, ProductActivity.class);
                     pintent.putExtra("product_key", mProductBean);
@@ -114,21 +111,24 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    // 壁纸下载入口
     private void downloadWallpapers(String homepageUrl, String productUrl) {
         int total = 0;
         if (!homepageUrl.isEmpty()) total++;
         if (!productUrl.isEmpty()) total++;
 
         pendingDownloads = total;
-        ProgressDialog dialog = showProgressDialogWithBar("下载中", "正在下载壁纸...", total);
+        ProgressDialog dialog = showProgressDialogWithBar(
+                getString(R.string.download_progress),
+                getString(R.string.downloading_wallpapers),
+                total
+        );
 
         if (!homepageUrl.isEmpty()) {
-            downloadWallpaper(homepageUrl, "wallpaper_home.jpg", "主页壁纸", dialog);
+            downloadWallpaper(homepageUrl, "wallpaper_home.jpg", getString(R.string.home_wallpaper), dialog);
         }
 
         if (!productUrl.isEmpty()) {
-            downloadWallpaper(productUrl, "wallpaper_product.jpg", "产品壁纸", dialog);
+            downloadWallpaper(productUrl, "wallpaper_product.jpg", getString(R.string.product_wallpaper), dialog);
         }
     }
 
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 success = tmpFile.renameTo(finalFile);
 
             } catch (Exception e) {
-                Log.e(TAG, label + " 下载失败", e);
+                Log.e(TAG, label + " download failed", e);
             }
 
             boolean finalSuccess = success;
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
         pendingDownloads--;
         if (pendingDownloads <= 0) {
             dialog.dismiss();
-            String msg = success ? "壁纸下载完成" : "部分下载失败";
+            String msg = success ? getString(R.string.wallpaper_download_complete) : getString(R.string.download_partial_failure);
             File wallpaperFile = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "wallpaper_home.jpg");
             if (wallpaperFile.exists()) {
                 ImageView bgView = findViewById(R.id.iv_background);
@@ -195,7 +195,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // ========= ProgressDialog 显示辅助方法 =========
     private void showProgressDialog(String msg) {
         runOnUiThreadSafe(() -> {
             progressDialog = new ProgressDialog(this);
@@ -273,7 +272,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.btn_settings).setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, MenuActivity.class)));
 
-
         mScannerManager = new ScanManager();
         try {
             ACTION_SEND_RESULT = mScannerManager.getParameterString(ParameterID.BROADCAST_ACTION);
@@ -283,11 +281,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         registerReceiver(mResultReceiver, new IntentFilter(ACTION_SEND_RESULT), Context.RECEIVER_EXPORTED);
-
-
-
         findViewById(R.id.btn_settings).setVisibility(View.VISIBLE);
-
     }
 
     private void hideSystemUI() {

@@ -5,7 +5,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="gray_background">#CCCCCC</color>
-    <color name="save_button_blue">#2196F3</color> <!-- 你可以换成你想要的蓝色 -->
+    <!-- 你可以换成你想要的蓝色 -->
     <color name="sku_bg">#f3f3f3</color>
 </resources>

@@ -1,7 +1,22 @@
 plugins {
     alias(libs.plugins.android.application)
 }
-
+def signerName(){
+    return 'me'
+}
+def getVersionName() {
+    def versionCodeFile = file('version.properties')
+    if (versionCodeFile.canRead()) {
+        Properties properties = new Properties()
+        properties.load(new FileInputStream(versionCodeFile))
+        def versionCode = properties['VERSION_CODE'].toInteger()
+        properties['VERSION_CODE'] = (++versionCode).toString()
+        properties.store(versionCodeFile.newWriter(), null)
+        return versionCode
+    } else {
+        throw new GradleException("无法读取version.properties文件！")
+    }
+}
 android {
     namespace 'com.meferi.mssql'
     compileSdk 35
@@ -16,8 +31,29 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    def signfile = 'signer/platform_'+signerName()+'.keystore'
+    signingConfigs {
+        release {
+            storeFile file(signfile)
+            storePassword "111111"
+            keyAlias "meferi"
+            keyPassword "111111"
+        }
+        debug {
+            storeFile file(signfile)
+            storePassword "111111"
+            keyAlias "meferi"
+            keyPassword "111111"
+        }
+    }
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            signingConfig signingConfigs.debug
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }

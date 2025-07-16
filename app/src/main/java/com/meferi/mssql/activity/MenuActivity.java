@@ -34,6 +34,7 @@ public class MenuActivity extends AppCompatActivity {
             this.action = action;
         }
     }
+
     private void hideSystemUI() {
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
@@ -45,6 +46,7 @@ public class MenuActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
         );
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,12 +57,12 @@ public class MenuActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<MenuItem> items = Arrays.asList(
-                new MenuItem("服务器配置", () -> startActivity(new Intent(this, ServerSettingsActivity.class))),
-                new MenuItem("产品参数配置", () -> startActivity(new Intent(this, DbSettingsActivity.class))),
-                new MenuItem("设置", () -> startActivity(new Intent(this, SettingsActivity.class))),
-                new MenuItem("导出设置", () -> {
+                new MenuItem(getString(R.string.menu_server_config), () -> startActivity(new Intent(this, ServerSettingsActivity.class))),
+                new MenuItem(getString(R.string.menu_product_param_config), () -> startActivity(new Intent(this, DbSettingsActivity.class))),
+                new MenuItem(getString(R.string.menu_settings), () -> startActivity(new Intent(this, SettingsActivity.class))),
+                new MenuItem(getString(R.string.menu_export_settings), () -> {
                     ProgressDialog progressDialog = new ProgressDialog(MenuActivity.this);
-                    progressDialog.setMessage("正在生成二维码...");
+                    progressDialog.setMessage(getString(R.string.generating_qr_code));
                     progressDialog.setCancelable(false);
                     progressDialog.show();
 
@@ -71,18 +73,15 @@ public class MenuActivity extends AppCompatActivity {
                             if (qrBitmap != null) {
                                 QRCodeDialog.showQRCodePopup(MenuActivity.this, getWindow().getDecorView(), qrBitmap);
                             } else {
-                                Toast.makeText(MenuActivity.this, "二维码生成失败", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MenuActivity.this, getString(R.string.qr_code_generation_failed), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }).start();
                 })
-
         );
 
         recyclerView.setAdapter(new MenuAdapter(items));
     }
-
-
 
     private class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.MenuViewHolder> {
 

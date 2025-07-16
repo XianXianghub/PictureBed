@@ -1,6 +1,7 @@
 package com.meferi.mssql.view;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -25,8 +26,10 @@ public class QRCodeDialog {
 
 
     public static void showQRCodePopup(Context context, View anchorView, Bitmap qrBitmap) {
+        Resources res = context.getResources();
+
         if (qrBitmap == null) {
-            Toast.makeText(context, "二维码生成失败", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, res.getString(R.string.qr_code_generation_failed), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -49,14 +52,15 @@ public class QRCodeDialog {
             Log.d("QRCodeDialog", "saveQRCodePopup: " + fileName);
             File savedFile = saveBitmapToPicturesFile(context, qrBitmap, fileName);
             if (savedFile != null) {
-                Toast.makeText(context, "二维码已保存到:\n" + savedFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context,
+                        res.getString(R.string.qr_code_saved_to, savedFile.getAbsolutePath()),
+                        Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(context, "保存失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, res.getString(R.string.save_failed), Toast.LENGTH_SHORT).show();
             }
             popupWindow.dismiss();
         });
 
-        // 居中弹出
         popupWindow.showAtLocation(anchorView, Gravity.CENTER, 0, 0);
     }
 

@@ -40,7 +40,6 @@
 
     <!-- ========== Main scrollable form area ========== -->
     <ScrollView
-        android:id="@+id/sv_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -193,7 +192,6 @@
 
             <!-- ===== Divider between two sections ===== -->
             <View
-                android:id="@+id/divider_view"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="16dp"

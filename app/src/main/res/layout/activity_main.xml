@@ -23,7 +23,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/iv_logo"
             android:layout_width="174dp"
             android:layout_height="51dp"
             android:scaleType="fitCenter"
